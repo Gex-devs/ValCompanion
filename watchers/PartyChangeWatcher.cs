@@ -5,6 +5,7 @@ using ValRestServer;
 using Newtonsoft.Json;
 using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
+using ValRestServer.watchers;
 
 public class PartyChangeWatcher
 {
@@ -14,13 +15,15 @@ public class PartyChangeWatcher
     private WebSocket _web;
     private string previousState;
     public event EventHandler DataChanged;
+    private AgentSelWatcher _watcher;
 
-    public PartyChangeWatcher(WebSocket web)
+    public PartyChangeWatcher(WebSocket web, AgentSelWatcher watcher)
     {
         httpClient = new HttpClient();
         _web = web;
         _otherLastData = string.Empty;
         lastData = string.Empty;
+        _watcher = watcher;
     }
 
     public void StartWatching()
@@ -36,6 +39,15 @@ public class PartyChangeWatcher
                 {
                     _otherLastData = otherData;
                     HandleCurrentStateChange(otherData);
+                    if (otherData == "Agent_sel")
+                    {
+                        Console.WriteLine("Set to true");
+                        _watcher.SetWatch(true);
+                    }
+                    else
+                    {
+                        _watcher.SetWatch(false); 
+                    }
                 }
 
                 if (newData != lastData)
