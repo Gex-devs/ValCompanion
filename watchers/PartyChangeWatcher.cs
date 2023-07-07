@@ -10,6 +10,7 @@ public class PartyChangeWatcher
 {
     private readonly HttpClient httpClient;
     private string lastData;
+    private string _otherLastData;
     private WebSocket _web;
     private string previousState;
     public event EventHandler DataChanged;
@@ -18,6 +19,7 @@ public class PartyChangeWatcher
     {
         httpClient = new HttpClient();
         _web = web;
+        _otherLastData = string.Empty;
         lastData = string.Empty;
     }
 
@@ -28,6 +30,13 @@ public class PartyChangeWatcher
             while (true)
             {
                 var newData = FetchData("http://localhost:7979/api/getParty");
+                var otherData = FetchData("http://localhost:7979/api/current_state");
+
+                if (otherData != _otherLastData)
+                {
+                    _otherLastData = otherData;
+                    HandleCurrentStateChange(otherData);
+                }
 
                 if (newData != lastData)
                 {
@@ -66,16 +75,17 @@ public class PartyChangeWatcher
 
     private void HandleDataChanged(string newData)
     {
-        JObject obj = JObject.Parse(newData);
-
-        // Get the value of the "State" field
-        string state = obj["State"].ToString();
-
         
         Console.WriteLine("Party data has changed!");
         _web.BroadcastMessage(newData);
 
         
         // Perform any desired actions here
+    }
+
+    private void HandleCurrentStateChange(string newData)
+    {
+        Console.WriteLine("Current State changed");
+        _web.BroadcastMessage(newData);
     }
 }

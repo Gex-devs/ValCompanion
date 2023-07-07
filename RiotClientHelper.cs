@@ -22,8 +22,12 @@ public sealed class RiotClientHelper
     private string authorization;
     private string playerID;
     private string base64Chat;
+    private string playerName;
 
-    private RiotClientHelper() { }
+    private HttpClient _client;
+    private RiotClientHelper() { 
+        _client = new HttpClient();
+    }
 
     public async Task GetAccessTokenAsync()
     {
@@ -69,6 +73,7 @@ public sealed class RiotClientHelper
                                 authorization = j.accessToken;
                                 playerID = j.subject;
                                 accessToken = responseContent;
+                                playerName = _client.GetStringAsync("http://localhost:7979/api/get_name?"+playerID).Result;
                             }
                             catch (Exception ex)
                             {
@@ -107,6 +112,11 @@ public sealed class RiotClientHelper
     public string GetLockFilePort()
     {
         return lockFilePort;
+    }
+
+    public string GetPlayerName()
+    {
+        return playerName;
     }
 
     public async Task<string> GetPreMatchId()

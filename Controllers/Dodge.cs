@@ -17,7 +17,7 @@ namespace ValRestServer.Controllers
             _httpClient = new HttpClient(httpClientHandler);
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<ActionResult<int>> DodgeGame()
         {
             var url = $"https://glz-eu-1.eu.a.pvp.net/pregame/v1/matches/{RiotClientHelper.Instance.GetPreMatchId()}/quit";
