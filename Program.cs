@@ -50,6 +50,9 @@ void StartWatchers(WebSocket web)
 {
     AgentSelWatcher agentSelWatcher = new AgentSelWatcher(web);
     PartyChangeWatcher watcher = new PartyChangeWatcher(web,agentSelWatcher);
+    PartyChatWatcher partyChatWatcher = new PartyChatWatcher(web);
+
     watcher.StartWatching();
     agentSelWatcher.StartWatching();
+    partyChatWatcher.StartWatching();
 }
