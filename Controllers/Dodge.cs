@@ -20,7 +20,7 @@ namespace ValRestServer.Controllers
         [HttpGet]
         public async Task<ActionResult<int>> DodgeGame()
         {
-            var url = $"https://glz-eu-1.eu.a.pvp.net/pregame/v1/matches/{RiotClientHelper.Instance.GetPreMatchId()}/quit";
+            var url = $"https://glz-eu-1.eu.a.pvp.net/pregame/v1/matches/{await RiotClientHelper.Instance.GetPreMatchId()}/quit";
 
             _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Add("X-Riot-Entitlements-JWT", RiotClientHelper.Instance.GetEntitlement());

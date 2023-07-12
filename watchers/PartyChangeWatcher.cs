@@ -77,7 +77,7 @@ public class PartyChangeWatcher
             foreach (var innerException in ex.InnerExceptions)
             {
                 // Handle each individual exception
-                Console.WriteLine("Exception: " + innerException.Message);
+                Console.WriteLine("Party Exception: " + innerException.Message);
             }
         }
 

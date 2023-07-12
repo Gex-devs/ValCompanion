@@ -42,8 +42,7 @@ namespace ValRestServer
             WebSocket web = new WebSocket();
             await web.StartServer();
 
-
-            StartWatchers(web);
+            
 
 
             RiotClientHelper riotClient = RiotClientHelper.Instance;
@@ -52,11 +51,14 @@ namespace ValRestServer
 
             // Disable SSL certificate validation
             ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseAuthorization();
             app.MapControllers();
-            
-            app.Run();
+
+            app.RunAsync();
+
+
+            StartWatchers(web);
         }
 
         public static void StartWatchers(WebSocket web)

@@ -5,7 +5,12 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <StartupObject>ValRestServer.SystemTray</StartupObject>
+    <ApplicationIcon>Assets\TrayIcon.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\TrayIcon.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="DnsClient" Version="1.7.0" />

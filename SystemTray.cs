@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Drawing;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ValRestServer
@@ -8,7 +10,8 @@ namespace ValRestServer
     {
         private static NotifyIcon notifyIcon;
         private static ContextMenuStrip contextMenu;
-        private static Thread RestServerThread;
+        private static Thread restServerThread;
+        private static bool isRunning;
 
         [STAThread]
         static void Main()
@@ -18,20 +21,18 @@ namespace ValRestServer
 
             // Create and configure the notify icon
             notifyIcon = new NotifyIcon();
-            notifyIcon.Icon = new System.Drawing.Icon("Assets/TrayIcon.ico");
+            notifyIcon.Icon = new Icon("Assets/TrayIcon.ico");
             notifyIcon.Text = "Valo Companion";
             notifyIcon.Visible = true;
+
             // Create the context menu
             contextMenu = CreateContextMenu();
             notifyIcon.ContextMenuStrip = contextMenu;
 
-            RestServerThread = new Thread(() =>
-            {
-                RestServer.RunAsync();
+            isRunning = true;
 
-            });
-
-            RestServerThread.Start();
+            restServerThread = new Thread(RunRestServer);
+            restServerThread.Start();
 
             notifyIcon.ShowBalloonTip(1000, "Notice", "Valo Companion is running in Background", ToolTipIcon.Info);
 
@@ -50,10 +51,15 @@ namespace ValRestServer
             exitMenuItem.Text = "Exit";
             exitMenuItem.Click += OnExitClicked;
 
-            contextMenu.Items.Add(settingsMenuItem);
+            //contextMenu.Items.Add(settingsMenuItem);
             contextMenu.Items.Add(exitMenuItem);
 
             return contextMenu;
+        }
+
+        private static void RunRestServer()
+        {
+            RestServer.RunAsync().Wait();
         }
 
         private static void OnSettingsClicked(object sender, EventArgs e)
@@ -65,9 +71,15 @@ namespace ValRestServer
         {
             // Clean up resources
             notifyIcon.Dispose();
-            RestServerThread.Abort();
+            isRunning = false;
+
+            // Wait for the thread to complete gracefully
+            restServerThread.Join();
+
             // Exit the application
             Application.Exit();
         }
     }
+
+  
 }
