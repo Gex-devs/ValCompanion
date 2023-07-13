@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <StartupObject>ValRestServer.SystemTray</StartupObject>
     <ApplicationIcon>Assets\TrayIcon.ico</ApplicationIcon>
+    <OutputType>WinExe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,13 +17,12 @@
     <PackageReference Include="DnsClient" Version="1.7.0" />
     <PackageReference Include="Fleck" Version="1.2.0" />
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
-    <PackageReference Include="Hardcodet.Wpf.TaskbarNotification" Version="1.0.5" />
     <PackageReference Include="Makaretu.Dns.Multicast" Version="0.27.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="System.Management" Version="7.0.2" />
     <PackageReference Include="vtortola.WebSocketListener" Version="3.0.0" />
-    <PackageReference Include="Zeroconf" Version="3.6.11" />
-    <PackageReference Include="ZeroconfService" Version="0.6.0" />
+    <PackageReference Include="WiX.Toolset.UnofficialFork" Version="3.11.2" />
   </ItemGroup>
 
 

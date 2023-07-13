@@ -67,13 +67,24 @@ public sealed class RiotClientHelper
                                 string responseContent = await response.Content.ReadAsStringAsync();
 
                                 // Process the response
-                                dynamic j = Newtonsoft.Json.JsonConvert.DeserializeObject(responseContent);
+                                dynamic jsonRespone = Newtonsoft.Json.JsonConvert.DeserializeObject(responseContent);
 
-                                entitlement = j.token;
-                                authorization = j.accessToken;
-                                playerID = j.subject;
+                                entitlement = jsonRespone.token;
+                                authorization = jsonRespone.accessToken;
+                                playerID = jsonRespone.subject;
                                 accessToken = responseContent;
-                                playerName = _client.GetStringAsync("http://localhost:7979/api/get_name?"+playerID).Result;
+
+                                // Send Another Request for user info , Reuse objects
+
+                                url = $"https://127.0.0.1:{lockFilePort}/player-account/aliases/v1/active";
+                                response = await client.GetAsync(url);
+                                response.EnsureSuccessStatusCode();
+                                responseContent = await response.Content.ReadAsStringAsync();
+
+                                jsonRespone = Newtonsoft.Json.JsonConvert.DeserializeObject(responseContent);
+
+
+                                playerName = jsonRespone.game_name;
                             }
                             catch (Exception ex)
                             {

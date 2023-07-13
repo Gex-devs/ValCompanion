@@ -19,7 +19,8 @@ namespace ValRestServer
         public async Task StartServer()
         {
             // Advertise the server using mDNS.
-            var serviceInfo = new ServiceProfile("Player Name", "_http._tcp", 8765);
+
+            var serviceInfo = new ServiceProfile(RiotClientHelper.Instance.GetPlayerName(), "_http._tcp", 8765);
 
             var mdns = new ServiceDiscovery();
 

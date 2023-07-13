@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,6 +17,13 @@ namespace ValRestServer
         [STAThread]
         static void Main()
         {
+            if(!CheckIfGameIsRunning())
+            {
+                MessageBox.Show("Valorant is Not Running", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
@@ -37,6 +45,9 @@ namespace ValRestServer
             notifyIcon.ShowBalloonTip(1000, "Notice", "Valo Companion is running in Background", ToolTipIcon.Info);
 
             Application.Run();
+
+
+
         }
 
         private static ContextMenuStrip CreateContextMenu()
@@ -51,6 +62,7 @@ namespace ValRestServer
             exitMenuItem.Text = "Exit";
             exitMenuItem.Click += OnExitClicked;
 
+            // Add later if you have a settings window
             //contextMenu.Items.Add(settingsMenuItem);
             contextMenu.Items.Add(exitMenuItem);
 
@@ -77,7 +89,21 @@ namespace ValRestServer
             restServerThread.Join();
 
             // Exit the application
-            Application.Exit();
+            Environment.Exit(0);
+        }
+
+        private static bool CheckIfGameIsRunning()
+        {
+            Process[] process = Process.GetProcessesByName("VALORANT");
+
+            if(process.Length > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 

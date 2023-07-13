@@ -1,7 +1,6 @@
 using System;
 using System.Net;
 using System.Windows;
-using System.Windows.Controls;
 using ValRestServer;
 using ValRestServer.watchers;
 
@@ -39,14 +38,17 @@ namespace ValRestServer
                 
             }
 
+            RiotClientHelper riotClient = RiotClientHelper.Instance;
+            await riotClient.GetAccessTokenAsync();
+
+
             WebSocket web = new WebSocket();
             await web.StartServer();
 
             
 
 
-            RiotClientHelper riotClient = RiotClientHelper.Instance;
-            await riotClient.GetAccessTokenAsync();
+           
 
 
             // Disable SSL certificate validation
