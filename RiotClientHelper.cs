@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,7 +22,7 @@ public sealed class RiotClientHelper
     private string entitlement;
     private string authorization;
     private string playerID;
-    private string base64Chat;
+    private static string base64Chat;
     private string playerName;
 
     private HttpClient _client;
@@ -145,15 +146,31 @@ public sealed class RiotClientHelper
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {authorization}");
 
             var response = await client.GetAsync(url);
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                var jsonResponse = await response.Content.ReadAsStringAsync();
-                var matchID = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(jsonResponse)["MatchID"].ToString();
-                return matchID;
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var matchID = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(jsonResponse)["MatchID"].ToString();
+                    return matchID;
+                }
+
+                throw new Exception("Failed to retrieve prematch ID");
+            }catch (Exception ex)
+            {
+                RefreshToken();
+                response = await client.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var matchID = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(jsonResponse)["MatchID"].ToString();
+                    return matchID;
+                }
+                throw new Exception("Unkown Error");
+
             }
 
-            throw new Exception("Failed to retrieve prematch ID");
+
         }
     }
     public async Task<string> GetPartyId(int index)
@@ -168,16 +185,33 @@ public sealed class RiotClientHelper
             httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Instance.GetAuthorization()}");
 
             var response = await httpClient.GetAsync(url);
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                var jsonResponse = await response.Content.ReadAsStringAsync();
-                var j = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(jsonResponse);
-                var currentPartyId = j["CurrentPartyID"].ToString();
-                return index == 1 ? currentPartyId : currentPartyId + "@ares-parties.eu2.pvp.net";
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var j = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(jsonResponse);
+                    var currentPartyId = j["CurrentPartyID"].ToString();
+                    return index == 1 ? currentPartyId : currentPartyId + "@ares-parties.eu2.pvp.net";
+                }
+
+                throw new Exception("Failed to retrieve party ID");
+            }
+            catch (Exception ex) {
+                RefreshToken();
+                response = await httpClient.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var j = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(jsonResponse);
+                    var currentPartyId = j["CurrentPartyID"].ToString();
+                    return index == 1 ? currentPartyId : currentPartyId + "@ares-parties.eu2.pvp.net";
+                }
+
+                throw new Exception("Unkown Error");
+
             }
 
-            throw new Exception("Failed to retrieve party ID");
         }
     }
 
@@ -193,17 +227,34 @@ public sealed class RiotClientHelper
             httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Instance.GetAuthorization()}");
 
             var response = await httpClient.GetAsync(url);
+            try {
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var j = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(jsonResponse);
+                    var matchID = j["MatchID"].ToString();
 
-            if (response.IsSuccessStatusCode)
-            {
-                var jsonResponse = await response.Content.ReadAsStringAsync();
-                var j = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(jsonResponse);
-                var matchID = j["MatchID"].ToString();
+                    return matchID;
+                }
 
-                return matchID;
+                throw new Exception("Failed to retrieve prematch ID");
+            }
+            catch (Exception ex) { 
+                RefreshToken();
+                response = await httpClient.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var j = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(jsonResponse);
+                    var matchID = j["MatchID"].ToString();
+
+                    return matchID;
+                }
+
+                throw new Exception("Unkown Error");
+
             }
 
-            throw new Exception("Failed to retrieve prematch ID");
         }
     }
     public async Task<string> GetCurrentGameId()
@@ -217,17 +268,66 @@ public sealed class RiotClientHelper
             httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {instance.GetAuthorization()}");
 
             var response = await httpClient.GetAsync(url);
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                var jsonResponse = await response.Content.ReadAsStringAsync();
-                var j = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(jsonResponse);
-                var currentGameId = j["MatchID"].ToString();
-                return currentGameId;
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var j = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(jsonResponse);
+                    var currentGameId = j["MatchID"].ToString();
+                    return currentGameId;
+                }
+
+                throw new Exception("Failed to retrieve current game ID");
+            }
+            catch (Exception ex) {
+                RefreshToken();
+                response = await httpClient.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var j = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(jsonResponse);
+                    var currentGameId = j["MatchID"].ToString();
+                    return currentGameId;
+                }
+
+                throw new Exception("Unkown Error");
             }
 
-            throw new Exception("Failed to retrieve current game ID");
+            
         }
     }
 
+    private async void RefreshToken() {
+        using (HttpClientHandler handler = new HttpClientHandler())
+        {
+            // Disable SSL verification
+            handler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true;
+
+            using (HttpClient client = new HttpClient(handler))
+            {
+                client.DefaultRequestHeaders.Add("Authorization", $"Basic {base64Chat}");
+                try
+                {
+                    string url = $"https://127.0.0.1:{lockFilePort}/entitlements/v1/token";
+                    HttpResponseMessage response = await client.GetAsync(url);
+                    response.EnsureSuccessStatusCode();
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    // Process the response
+                    dynamic jsonRespone = Newtonsoft.Json.JsonConvert.DeserializeObject(responseContent);
+
+                    entitlement = jsonRespone.token;
+                    authorization = jsonRespone.accessToken;
+                    playerID = jsonRespone.subject;
+                    accessToken = responseContent;
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred during the request: " + ex.Message);
+                }
+            }
+        }
+    }
 }
