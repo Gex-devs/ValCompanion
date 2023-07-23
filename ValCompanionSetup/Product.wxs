@@ -18,7 +18,7 @@
 
 		<UIRef Id="WixUI_InstallDir" />
 		<WixVariable Id="WixUIBannerBmp" Value="Images\InstallerIcon.bmp" />
-		<WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)\gpl-3.0.rtf" />
+		<WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)gpl-3.0.rtf" />
 
 	</Product>
 

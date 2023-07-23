@@ -3,13 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ValRestServer", "ValRestServer.csproj", "{8EA039C6-87AD-49A0-9066-63F5D5C115FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ValRestServer", ".\StandAlone\ValRestServer.csproj", "{8EA039C6-87AD-49A0-9066-63F5D5C115FC}"
 EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "ValCompanionSetup", "..\ValCompanionSetup\ValCompanionSetup.wixproj", "{9F362873-296F-4C76-B3BE-0D4439B10066}"
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "ValCompanionSetup", ".\ValCompanionSetup\ValCompanionSetup.wixproj", "{9F362873-296F-4C76-B3BE-0D4439B10066}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ValCompanionUnitTest", "..\ValCompanionUnitTest\ValCompanionUnitTest.csproj", "{1BF3E71B-0E59-47C6-BA01-678FCECF51F9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "process_manager", "..\process_manager\process_manager.csproj", "{FB2F1840-CC90-488A-8085-A825A4C432F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ValCompanionUnitTest", ".\ValCompanionUnitTest\ValCompanionUnitTest.csproj", "{1BF3E71B-0E59-47C6-BA01-678FCECF51F9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

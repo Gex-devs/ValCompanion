@@ -1,0 +1,3 @@
+# Remove the build files
+bin
+obj

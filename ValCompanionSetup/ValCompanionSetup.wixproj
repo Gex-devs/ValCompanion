@@ -31,16 +31,6 @@
     <Content Include="WiX.Toolset.DummyFile.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ValRestServerStandAlone\ValRestServer.csproj">
-      <Name>ValRestServer</Name>
-      <Project>{8ea039c6-87ad-49a0-9066-63f5d5c115fc}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>False</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Images" />
   </ItemGroup>
   <ItemGroup>
@@ -49,8 +39,18 @@
       <Name>WixUIExtension</Name>
     </WixExtension>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StandAlone\ValRestServer.csproj">
+      <Name>ValRestServer</Name>
+      <Project>{8ea039c6-87ad-49a0-9066-63f5d5c115fc}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
-    <WixToolPath>$(SolutionDir)packages\WiX.Toolset.UnofficialFork.3.11.2\tools\wix\</WixToolPath>
+    <WixToolPath>$(SolutionDir)StandAlone\packages\WiX.Toolset.UnofficialFork.3.11.2\tools\wix\</WixToolPath>
     <WixTargetsPath>$(WixToolPath)wix.targets</WixTargetsPath>
     <WixTasksPath>$(WixToolPath)WixTasks.dll</WixTasksPath>
   </PropertyGroup>

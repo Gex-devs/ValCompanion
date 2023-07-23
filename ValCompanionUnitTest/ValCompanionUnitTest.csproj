@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ValRestServerStandAlone\ValRestServer.csproj" />
+    <ProjectReference Include="..\StandAlone\ValRestServer.csproj" />
   </ItemGroup>
 
 </Project>
