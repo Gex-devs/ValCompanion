@@ -17,7 +17,7 @@
 		<Property Id="WIXUI_INSTALLDIR" Value="ProgramFilesFolder" />
 
 		<UIRef Id="WixUI_InstallDir" />
-		<WixVariable Id="WixUIBannerBmp" Value="Images\InstallerIcon.bmp" />
+		<WixVariable Id="WixUIBannerBmp" Value="$(var.ProjectDir)Images\InstallerIcon.bmp" />
 		<WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)gpl-3.0.rtf" />
 
 	</Product>
