@@ -130,7 +130,7 @@
 	<Fragment>
 		<ComponentGroup Id="Assets_files" Directory="Assets">
 			<Component Id="Assets_TrayIcon.ico" Guid="8bbce8fa-1322-48dc-977e-cd694f0d5bb7">
-				<File Id="Assets_TrayIcon.ico" Name="TrayIcon.ico" Source="$(var.ValRestServer_TargetDir)Assets\TrayIcon.ico" />
+				<File Id="Assets_TrayIcon.ico" Name="TrayIcon.ico" Source="$(var.ProjectDir)Images\TrayIcon.ico" />
 			</Component>
 		</ComponentGroup>
 	</Fragment>
