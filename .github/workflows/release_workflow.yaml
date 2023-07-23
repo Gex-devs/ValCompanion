@@ -12,7 +12,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      
+      - name: Read changelog
+        id: read_changelog
+        run: |
+          echo ::set-output name=CHANGELOG::$(cat changelog.md)
+          
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v1
         with:
