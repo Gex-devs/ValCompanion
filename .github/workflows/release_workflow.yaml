@@ -15,26 +15,7 @@ jobs:
 
       - name: Build Installer
         run: .\buildInstaller.bat  # Path to your Windows batch script in the repository root
-
-      - name: Read changelog
-        id: read_changelog
-        run: |
-          echo ::set-output name=CHANGELOG::$(cat changelog.md)
-
-      - name: Fetch previous release info
-        id: get_previous_release
-        run: |
-          LATEST_TAG=$(git describe --abbrev=0 --tags)
-          PREVIOUS_RELEASE_INFO=$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases/tags/${LATEST_TAG}")
-          echo ::set-output name=PREVIOUS_CHANGELOG::$(echo "$PREVIOUS_RELEASE_INFO" | jq -r ".body")
-
-      - name: Compare changelogs
-        run: |
-          if [ "${{ steps.read_changelog.outputs.CHANGELOG }}" = "${{ steps.get_previous_release.outputs.PREVIOUS_CHANGELOG }}" ]; then
-            echo "Changelog is identical to the previous release."
-            exit 1
-          fi
-
+        
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
