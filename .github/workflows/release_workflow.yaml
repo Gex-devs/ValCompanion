@@ -20,7 +20,8 @@ jobs:
 
       - name: Restore dependencies
         run: dotnet restore
-
+        working-directory: .\StandAlone
+        
       - name: Build project
         run: dotnet build --configuration Release
         working-directory: .\StandAlone
