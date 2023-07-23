@@ -41,6 +41,9 @@ jobs:
         with:
           tag_name: ${{ github.ref }}  # Use the tag name from the event
           release_name: Release ${{ github.ref }}  # Use the tag name for the release name
+          draft: false
+          prerelease: false
+
           body: ${{steps.read_changelog.outputs.CHANGELOG }}
 
       - name: Upload Release Asset
@@ -49,7 +52,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: .\ValCompanionSetup\bin\Release  
+          asset_path: .\ValCompanionSetup\bin\Release\ValCompanionSetup.msi  
           asset_name: ValCompanionSetup.msi 
           asset_content_type: application/x-msi
 
