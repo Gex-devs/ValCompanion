@@ -12,10 +12,23 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 'net6.0-windows'  # Change this to the desired .NET version
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build project
+        run: dotnet build --configuration Release
+        working-directory: .\StandAlone
 
       - name: Build Installer
         run: .\buildInstaller.bat  # Path to your Windows batch script in the repository root
-        
+        working-directory: .\StandAlone
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
