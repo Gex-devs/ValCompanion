@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+	<?define ValRestServer_TargetDir=$(var.ValRestServer.TargetDir)?>
+	<Product Id="7b00ce87-9cce-454a-9619-4f5050e597dc" Name="Valo Companion" Language="1033" Version="1.0" Manufacturer="Gex-Production" UpgradeCode="b9b1bb62-78e4-4318-873a-de7549fb6d9e">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate EmbedCab="yes" />
+
+		<Feature Id="ProductFeature" Title="Valo Companion" Level="1">
+			<ComponentGroupRef Id="ProgramFilesFolder_files" />
+			<ComponentGroupRef Id="Assets_files" />
+			<ComponentRef Id="ApplicationShortcutDesktop" />
+		</Feature>
+
+		<Property Id="ARPPRODUCTICON" Value="$(var.ProjectDir)Images\TrayIcon.ico" />
+
+		<Property Id="WIXUI_INSTALLDIR" Value="ProgramFilesFolder" />
+
+		<UIRef Id="WixUI_InstallDir" />
+		<WixVariable Id="WixUIBannerBmp" Value="Images\InstallerIcon.bmp" />
+		<WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)\gpl-3.0.rtf" />
+
+	</Product>
+
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramMenuFolder">
+				<Directory Id="ApplicationProgramsFolder" Name="Valo Companion" />
+			</Directory>
+
+			<Directory Id="ProgramFilesFolder" Name="ValCompanion">
+				<Directory Id="INSTALLFOLDER" Name="ValCompanion">
+					<Directory Id="Assets" Name="Assets" />
+					<Directory Id="packages_WiX.Toolset.UnofficialFork.3.11.2_tools_wix_sdk" Name="sdk" />
+				</Directory>
+			</Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<DirectoryRef Id="ApplicationProgramsFolder">
+			<Component Id="ApplicationShortcutDesktop" Guid="305dc292-f9af-4961-9fd1-bf38f5ad08db">
+				<Shortcut Id="ApplicationStartMenuShortcut" Name="Val Companion" Description="Launch Val Companion" Target="[INSTALLFOLDER]ValRestServer.exe" WorkingDirectory="INSTALLFOLDER" />
+				<RemoveFolder Id="DesktopFolder" Directory="ApplicationProgramsFolder" On="uninstall" />
+				<RemoveFolder Id="ApplicationFolder" Directory="INSTALLFOLDER" On="uninstall" />
+				<RegistryValue Root="HKCU" Key="Software\GexProduction\ValCompanion" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+			</Component>
+		</DirectoryRef>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProgramFilesFolder_files" Directory="INSTALLFOLDER">
+			<Component Id="appsettings.Development.json" Guid="b52c183f-21c3-11ee-bf58-ddd6bafb4399">
+				<File Id="appsettings.Development.json" Name="appsettings.Development.json" Source="$(var.ValRestServer_TargetDir)appsettings.Development.json" />
+			</Component>
+			<Component Id="appsettings.json" Guid="b52c183f-21c3-11ee-bf58-9c2f55f9e66c">
+				<File Id="appsettings.json" Name="appsettings.json" Source="$(var.ValRestServer_TargetDir)appsettings.json" />
+			</Component>
+			<Component Id="Common.Logging.Core.dll" Guid="b52c183f-21c3-11ee-bf58-451aee1254e0">
+				<File Id="Common.Logging.Core.dll" Name="Common.Logging.Core.dll" Source="$(var.ValRestServer_TargetDir)Common.Logging.Core.dll" />
+			</Component>
+			<Component Id="Common.Logging.dll" Guid="b52c183f-21c3-11ee-bf58-a96c93cab109">
+				<File Id="Common.Logging.dll" Name="Common.Logging.dll" Source="$(var.ValRestServer_TargetDir)Common.Logging.dll" />
+			</Component>
+			<Component Id="DnsClient.dll" Guid="b52c183f-21c3-11ee-bf58-b012a6679dfd">
+				<File Id="DnsClient.dll" Name="DnsClient.dll" Source="$(var.ValRestServer_TargetDir)DnsClient.dll" />
+			</Component>
+			<Component Id="Fleck.dll" Guid="b52c3f3e-21c3-11ee-be7f-c5bf74f95c13">
+				<File Id="Fleck.dll" Name="Fleck.dll" Source="$(var.ValRestServer_TargetDir)Fleck.dll" />
+			</Component>
+			<Component Id="Hardcodet.NotifyIcon.Wpf.dll" Guid="b52c3f3e-21c3-11ee-be7f-f70bf623c0bf">
+				<File Id="Hardcodet.NotifyIcon.Wpf.dll" Name="Hardcodet.NotifyIcon.Wpf.dll" Source="$(var.ValRestServer_TargetDir)Hardcodet.NotifyIcon.Wpf.dll" />
+			</Component>
+			<Component Id="Makaretu.Dns.dll" Guid="b52c3f3e-21c3-11ee-be7f-65035297d3f1">
+				<File Id="Makaretu.Dns.dll" Name="Makaretu.Dns.dll" Source="$(var.ValRestServer_TargetDir)Makaretu.Dns.dll" />
+			</Component>
+			<Component Id="Makaretu.Dns.Multicast.dll" Guid="b52c3f3e-21c3-11ee-be7f-2f422e8d474a">
+				<File Id="Makaretu.Dns.Multicast.dll" Name="Makaretu.Dns.Multicast.dll" Source="$(var.ValRestServer_TargetDir)Makaretu.Dns.Multicast.dll" />
+			</Component>
+			<Component Id="Microsoft.OpenApi.dll" Guid="b52c3f3e-21c3-11ee-be7f-311325b04b30">
+				<File Id="Microsoft.OpenApi.dll" Name="Microsoft.OpenApi.dll" Source="$(var.ValRestServer_TargetDir)Microsoft.OpenApi.dll" />
+			</Component>
+			<Component Id="Newtonsoft.Json.dll" Guid="c7460747-21c3-11ee-8747-f23491573327">
+				<File Id="Newtonsoft.Json.dll" Name="Newtonsoft.Json.dll" Source="$(var.ValRestServer_TargetDir)Newtonsoft.Json.dll" />
+			</Component>
+			<Component Id="SimpleBase.dll" Guid="c7460747-21c3-11ee-8747-f74cbeda1b49">
+				<File Id="SimpleBase.dll" Name="SimpleBase.dll" Source="$(var.ValRestServer_TargetDir)SimpleBase.dll" />
+			</Component>
+			<Component Id="Swashbuckle.AspNetCore.Swagger.dll" Guid="c7462e1c-21c3-11ee-9c6e-ea86abd464ad">
+				<File Id="Swashbuckle.AspNetCore.Swagger.dll" Name="Swashbuckle.AspNetCore.Swagger.dll" Source="$(var.ValRestServer_TargetDir)Swashbuckle.AspNetCore.Swagger.dll" />
+			</Component>
+			<Component Id="Swashbuckle.AspNetCore.SwaggerGen.dll" Guid="c7462e1c-21c3-11ee-9c6e-b7183fb4385a">
+				<File Id="Swashbuckle.AspNetCore.SwaggerGen.dll" Name="Swashbuckle.AspNetCore.SwaggerGen.dll" Source="$(var.ValRestServer_TargetDir)Swashbuckle.AspNetCore.SwaggerGen.dll" />
+			</Component>
+			<Component Id="Swashbuckle.AspNetCore.SwaggerUI.dll" Guid="c7462e1c-21c3-11ee-9c6e-ce37782ac748">
+				<File Id="Swashbuckle.AspNetCore.SwaggerUI.dll" Name="Swashbuckle.AspNetCore.SwaggerUI.dll" Source="$(var.ValRestServer_TargetDir)Swashbuckle.AspNetCore.SwaggerUI.dll" />
+			</Component>
+			<Component Id="System.CodeDom.dll" Guid="c7462e1c-21c3-11ee-9c6e-ee46c0c5308c">
+				<File Id="System.CodeDom.dll" Name="System.CodeDom.dll" Source="$(var.ValRestServer_TargetDir)System.CodeDom.dll" />
+			</Component>
+			<Component Id="System.Management.dll" Guid="c7462e1c-21c3-11ee-9c6e-2d0dd02a9f86">
+				<File Id="System.Management.dll" Name="System.Management.dll" Source="$(var.ValRestServer_TargetDir)System.Management.dll" />
+			</Component>
+			<Component Id="System.Net.IPNetwork.dll" Guid="c7462e1c-21c3-11ee-9c6e-335427e5a3c0">
+				<File Id="System.Net.IPNetwork.dll" Name="System.Net.IPNetwork.dll" Source="$(var.ValRestServer_TargetDir)System.Net.IPNetwork.dll" />
+			</Component>
+			<Component Id="ValRestServer.deps.json" Guid="c7462e1c-21c3-11ee-9c6e-9e5dae77f932">
+				<File Id="ValRestServer.deps.json" Name="ValRestServer.deps.json" Source="$(var.ValRestServer_TargetDir)ValRestServer.deps.json" />
+			</Component>
+			<Component Id="ValRestServer.dll" Guid="c7462e1c-21c3-11ee-9c6e-f03dfc3789fb">
+				<File Id="ValRestServer.dll" Name="ValRestServer.dll" Source="$(var.ValRestServer_TargetDir)ValRestServer.dll" />
+			</Component>
+			<Component Id="ValRestServer.exe" Guid="c7462e1c-21c3-11ee-9c6e-afcd8575ecd4">
+				<File Id="ValRestServer.exe" Name="ValRestServer.exe" Source="$(var.ValRestServer_TargetDir)ValRestServer.exe" />
+			</Component>
+			<Component Id="ValRestServer.pdb" Guid="c7462e1c-21c3-11ee-9c6e-8924551fa657">
+				<File Id="ValRestServer.pdb" Name="ValRestServer.pdb" Source="$(var.ValRestServer_TargetDir)ValRestServer.pdb" />
+			</Component>
+			<Component Id="ValRestServer.runtimeconfig.json" Guid="c7462e1c-21c3-11ee-9c6e-dd8c78b881e4">
+				<File Id="ValRestServer.runtimeconfig.json" Name="ValRestServer.runtimeconfig.json" Source="$(var.ValRestServer_TargetDir)ValRestServer.runtimeconfig.json" />
+			</Component>
+			<Component Id="vtortola.WebSockets.dll" Guid="c7462e1c-21c3-11ee-9c6e-33e994b78c69">
+				<File Id="vtortola.WebSockets.dll" Name="vtortola.WebSockets.dll" Source="$(var.ValRestServer_TargetDir)vtortola.WebSockets.dll" />
+			</Component>
+
+		</ComponentGroup>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="Assets_files" Directory="Assets">
+			<Component Id="Assets_TrayIcon.ico" Guid="8bbce8fa-1322-48dc-977e-cd694f0d5bb7">
+				<File Id="Assets_TrayIcon.ico" Name="TrayIcon.ico" Source="$(var.ValRestServer_TargetDir)Assets\TrayIcon.ico" />
+			</Component>
+		</ComponentGroup>
+	</Fragment>
+</Wix>
