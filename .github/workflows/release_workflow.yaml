@@ -28,7 +28,6 @@ jobs:
 
       - name: Build Installer
         run: .\buildInstaller.bat  # Path to your Windows batch script in the repository root
-        working-directory: .\StandAlone
 
       - name: Create Release
         id: create_release
