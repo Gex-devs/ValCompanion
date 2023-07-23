@@ -16,7 +16,7 @@ jobs:
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 'net6.0-windows'  # Change this to the desired .NET version
+          dotnet-version: '6.0'  # Change this to the desired .NET version
 
       - name: Restore dependencies
         run: dotnet restore
