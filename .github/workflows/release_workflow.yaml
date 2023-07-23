@@ -12,10 +12,25 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
       - name: Read changelog
         id: read_changelog
         run: |
           echo ::set-output name=CHANGELOG::$(cat changelog.md)
+
+      - name: Fetch previous release info
+        id: get_previous_release
+        run: |
+          LATEST_TAG=$(git describe --abbrev=0 --tags)
+          PREVIOUS_RELEASE_INFO=$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases/tags/${LATEST_TAG}")
+          echo ::set-output name=PREVIOUS_CHANGELOG::$(echo "$PREVIOUS_RELEASE_INFO" | jq -r ".body")
+
+      - name: Compare changelogs
+        run: |
+          if [ "${{ steps.read_changelog.outputs.CHANGELOG }}" = "${{ steps.get_previous_release.outputs.PREVIOUS_CHANGELOG }}" ]; then
+            echo "Changelog is identical to the previous release. Please Update changelog"
+            exit 1
+          fi
 
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v1
@@ -25,7 +40,7 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
         working-directory: .\StandAlone
-        
+
       - name: Build project
         run: dotnet build --configuration Release
         working-directory: .\StandAlone
@@ -43,8 +58,7 @@ jobs:
           release_name: Release ${{ github.ref }}  # Use the tag name for the release name
           draft: false
           prerelease: false
-
-          body: ${{steps.read_changelog.outputs.CHANGELOG }}
+          body: ${{ steps.read_changelog.outputs.CHANGELOG }}
 
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
@@ -55,4 +69,3 @@ jobs:
           asset_path: .\ValCompanionSetup\bin\Release\ValCompanionSetup.msi  
           asset_name: ValCompanionSetup.msi 
           asset_content_type: application/x-msi
-
