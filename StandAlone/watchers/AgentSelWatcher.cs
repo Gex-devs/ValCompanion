@@ -32,9 +32,10 @@
                             DataChanged?.Invoke(this, EventArgs.Empty);
                             lastData = newData;
                             HandleDataChanged(newData);
+                            Console.WriteLine(newData);
                         }
 
-                        Thread.Sleep(500); // Wait for 1 second before the next request
+                        Thread.Sleep(500); 
                     }
                     
                 }
