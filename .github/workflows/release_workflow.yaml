@@ -18,20 +18,6 @@ jobs:
         run: |
           echo ::set-output name=CHANGELOG::$(cat changelog.md)
 
-      - name: Fetch previous release info
-        id: get_previous_release
-        run: |
-          LATEST_TAG=$(git describe --abbrev=0 --tags)
-          PREVIOUS_RELEASE_INFO=$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases/tags/${LATEST_TAG}")
-          echo ::set-output name=PREVIOUS_CHANGELOG::$(echo "$PREVIOUS_RELEASE_INFO" | jq -r ".body")
-
-      - name: Compare changelogs
-        run: |
-          if [ "${{ steps.read_changelog.outputs.CHANGELOG }}" = "${{ steps.get_previous_release.outputs.PREVIOUS_CHANGELOG }}" ]; then
-            echo "Changelog is identical to the previous release. Please Update changelog"
-            exit 1
-          fi
-
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v1
         with:
