@@ -28,8 +28,10 @@ namespace ValRestServer.Controllers
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {RiotClientHelper.Instance.GetAuthorization()}");
 
             var response = await _httpClient.PostAsync(url, null);
-
-            return response.StatusCode.ToString();
+            if (response.IsSuccessStatusCode) {
+                return Ok(response.StatusCode.ToString());
+            }
+            return BadRequest(response.StatusCode.ToString());
         }
     }
 }
