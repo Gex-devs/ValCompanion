@@ -4,4 +4,4 @@
 - Simple installer
 
 # Changelog
-- Added Token refresh, Doesn't require restart after an hour anymore. 
+- added new endpoint 
